@@ -5,6 +5,7 @@ import com.fragusan.fragusan.Exception.ResourceNotFoundException;
 import com.fragusan.fragusan.Interface.IUsuarioService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,13 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
+@CrossOrigin(origins="http://localhost:4200")
 public class UsuarioController {
     @Autowired IUsuarioService iusuarioServicio;
     
     public Usuario item;
     
     @GetMapping("/user/getAll")
-    public List <Usuario> getUser(){
+    public List <Usuario> getUserAll(){
         return iusuarioServicio.getUsuario();
     }
     
@@ -48,7 +50,7 @@ public class UsuarioController {
         } 
     }
     
-    @PutMapping("/user{id}")
+    @PutMapping("/user/up/{id}")
     public Usuario update(@PathVariable Long id, @RequestBody Usuario update){
     Usuario old=iusuarioServicio.findUsuaario(id);
     old.setNombre(update.getNombre());
@@ -59,5 +61,10 @@ public class UsuarioController {
         old.setPicBg(update.getPicBg());
         iusuarioServicio.saveUsuario(old);
     return old;
+    }
+	
+    @GetMapping("/user/get/{id}")
+    public Usuario getUser(@PathVariable Long id){
+    return iusuarioServicio.findUsuaario(id);
     }
 }
